@@ -19,8 +19,8 @@ function App() {
 
   async function getTodos() {
     const result = await fetch("/api/todos")
-    result.json()
-      .then(res => setTodos(res));
+    const todos = await result.json() as Todo[];
+    setTodos(todos);
   }
 
   async function updateCompleted(todo: Todo, isComplete: boolean) {
@@ -35,14 +35,15 @@ function App() {
       method: "POST",
       body: JSON.stringify(todo)
     })
-      .then(() => setTodoForm({ isComplete: false }))
-      .then(() => setShouldReload({}));
+    setTodoForm({ isComplete: false });
+    setShouldReload({});
   }
 
   async function deleteTodo(id: number) {
     await fetch(`/api/todos/${id}`, {
       method: "DELETE"
-    }).then(() => setShouldReload({}));
+    })
+    setShouldReload({});
   }
 
   function updateTodoForm<K extends keyof Todo>(key: K, value: Todo[K]) {
