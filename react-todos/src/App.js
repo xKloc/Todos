@@ -56,17 +56,15 @@ function App() {
         <input placeholder="Name" type="text" value={todoForm.name || ""} onChange={(e) => updateTodoForm("name", e.target.value)} />
         <button type="submit">Submit</button>
       </form>
-      <div>
-        <h3>Todo List</h3>
-        {todos.map(todo => {
-          return (
-            <div key={todo.id}>
-              <label><input type="checkbox" defaultChecked={todo.isComplete} onChange={(e) => updateCompleted(todo, e.target.checked)} />{todo.name} </label>
-              <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-            </div>
-          );
-        })}
-      </div>
+      <h3>Todo List</h3>
+      {todos.map(todo => {
+        return (
+          <div key={todo.id}>
+            <label><input type="checkbox" defaultChecked={todo.isComplete} onChange={(e) => updateCompleted(todo, e.target.checked)} />{todo.name} </label>
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </div>
+        );
+      })}
     </div>
   );
 }
