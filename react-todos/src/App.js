@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
-  const [todoForm, setTodoForm] = useState({ isComplete: false });
+  const [todoForm, setTodoForm] = useState({});
   const [todos, setTodos] = useState([]);
   const [shouldReload, setShouldReload] = useState({});
 
   async function getTodos() {
-    const result = await fetch("/api/todos")
-    result.json()
-      .then(res => setTodos(res));
+    const result = await fetch("/api/todos");
+    const todos = await result.json();
+    setTodos(todos);
   }
 
   async function updateCompleted(todo, isComplete) {
@@ -23,14 +23,15 @@ function App() {
       method: "POST",
       body: JSON.stringify(todo)
     })
-      .then(() => setTodoForm({ isComplete: false }))
-      .then(() => setShouldReload({}));
+    setTodoForm({});
+    setShouldReload({});
   }
 
   async function deleteTodo(id) {
     await fetch(`/api/todos/${id}`, {
       method: "DELETE"
-    }).then(() => setShouldReload({}));
+    });
+    setShouldReload({});
   }
 
   function updateTodoForm(key, value) {
@@ -39,7 +40,8 @@ function App() {
 
   function submitTodoForm(event) {
     event.preventDefault();
-    createTodo(todoForm);
+    if (todoForm.id && todoForm.name)
+      createTodo({ id: todoForm.id, name: todoForm.name, isComplete: false });
   }
 
   useEffect(() => {
@@ -50,7 +52,7 @@ function App() {
     <div>
       <form onSubmit={submitTodoForm}>
         <h3>New Todo</h3>
-        <input placeholder="Id" type="text" value={todoForm.id || ""} onChange={(e) => updateTodoForm("id", parseInt(e.target.value))} />
+        <input placeholder="Id" type="number" value={todoForm.id || ""} onChange={(e) => updateTodoForm("id", e.target.valueAsNumber)} />
         <input placeholder="Name" type="text" value={todoForm.name || ""} onChange={(e) => updateTodoForm("name", e.target.value)} />
         <button type="submit">Submit</button>
       </form>
@@ -59,7 +61,7 @@ function App() {
         {todos.map(todo => {
           return (
             <div key={todo.id}>
-              <label><input type="checkbox" defaultChecked={todo.isComplete} onChange={(event) => updateCompleted(todo, event.target.value)} />{todo.name} </label>
+              <label><input type="checkbox" defaultChecked={todo.isComplete} onChange={(e) => updateCompleted(todo, e.target.checked)} />{todo.name} </label>
               <button onClick={() => deleteTodo(todo.id)}>Delete</button>
             </div>
           );
