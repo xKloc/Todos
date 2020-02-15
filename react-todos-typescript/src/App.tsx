@@ -9,16 +9,15 @@ type Todo = {
 type TodoForm = {
   id?: number;
   name?: string;
-  isComplete: false;
 }
 
 function App() {
-  const [todoForm, setTodoForm] = useState<TodoForm>({ isComplete: false });
+  const [todoForm, setTodoForm] = useState<TodoForm>({});
   const [todos, setTodos] = useState<Todo[]>([]);
   const [shouldReload, setShouldReload] = useState({});
 
   async function getTodos() {
-    const result = await fetch("/api/todos")
+    const result = await fetch("/api/todos");
     const todos = await result.json() as Todo[];
     setTodos(todos);
   }
@@ -34,15 +33,15 @@ function App() {
     await fetch('/api/todos', {
       method: "POST",
       body: JSON.stringify(todo)
-    })
-    setTodoForm({ isComplete: false });
+    });
+    setTodoForm({});
     setShouldReload({});
   }
 
   async function deleteTodo(id: number) {
     await fetch(`/api/todos/${id}`, {
       method: "DELETE"
-    })
+    });
     setShouldReload({});
   }
 
@@ -53,7 +52,7 @@ function App() {
   function submitTodoForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (todoForm.id && todoForm.name)
-      createTodo(todoForm as Todo);
+      createTodo({ id: todoForm.id, name: todoForm.name, isComplete: false });
   }
 
   useEffect(() => {
