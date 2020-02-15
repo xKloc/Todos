@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 type Todo = {
   id: number;
@@ -60,7 +60,7 @@ function App() {
   }, [shouldReload]);
 
   return (
-    <div>
+    <Fragment>
       <form onSubmit={submitTodoForm}>
         <h3>New Todo</h3>
         <input placeholder="Id" type="number" value={todoForm.id || ""} onChange={(e) => updateTodoForm("id", e.target.valueAsNumber)} />
@@ -76,7 +76,7 @@ function App() {
           </div>
         );
       })}
-    </div>
+    </Fragment>
   );
 }
 
