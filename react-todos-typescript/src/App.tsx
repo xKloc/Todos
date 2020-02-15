@@ -45,7 +45,7 @@ function App() {
     }).then(() => setShouldReload({}));
   }
 
-  function updateTodoForm(key: keyof Todo, value: number | string | boolean) {
+  function updateTodoForm<K extends keyof Todo>(key: K, value: Todo[K]) {
     setTodoForm({ ...todoForm, [key]: value });
   }
 
