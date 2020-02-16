@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function App() {
-  const [todoForm, setTodoForm] = useState({});
+  const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [shouldReload, setShouldReload] = useState({});
 
@@ -23,7 +23,7 @@ function App() {
       method: "POST",
       body: JSON.stringify(todo)
     })
-    setTodoForm({});
+    setTodo("");
     setShouldReload({});
   }
 
@@ -34,14 +34,9 @@ function App() {
     setShouldReload({});
   }
 
-  function updateTodoForm(key, value) {
-    setTodoForm({ ...todoForm, [key]: value });
-  }
-
   function submitTodoForm(event) {
     event.preventDefault();
-    if (todoForm.id && todoForm.name)
-      createTodo({ id: todoForm.id, name: todoForm.name, isComplete: false });
+    createTodo({ name: todo });
   }
 
   useEffect(() => {
@@ -49,23 +44,32 @@ function App() {
   }, [shouldReload]);
 
   return (
-    <Fragment>
-      <form onSubmit={submitTodoForm}>
-        <h3>New Todo</h3>
-        <input placeholder="Id" type="number" value={todoForm.id || ""} onChange={(e) => updateTodoForm("id", e.target.valueAsNumber)} />
-        <input placeholder="Name" type="text" value={todoForm.name || ""} onChange={(e) => updateTodoForm("name", e.target.value)} />
-        <button type="submit">Submit</button>
-      </form>
-      <h3>Todo List</h3>
-      {todos.map(todo => {
-        return (
-          <div key={todo.id}>
-            <label><input type="checkbox" defaultChecked={todo.isComplete} onChange={(e) => updateCompleted(todo, e.target.checked)} />{todo.name} </label>
-            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-          </div>
-        );
-      })}
-    </Fragment>
+    <section class="todoapp">
+      <header class="header">
+        <h1>todos</h1>
+        <form onSubmit={submitTodoForm}>
+          <input class="new-todo" placeholder="What needs to be done?" value={todo || ""} onChange={(e) => setTodo(e.target.value)} />
+        </form>
+      </header>
+      <section class="main" style={{ display: "block" }}>
+        <input class="toggle-all" id="toggle-all" type="checkbox" />
+        <label for="toggle-all">Mark all as complete</label>
+        <ul class="todo-list">
+          {todos.map(todo => {
+            return (
+              <li className={todo.IsComplete ? "completed" : ""} key={todo.id}>
+                <div class="view">
+                  <input class="toggle" type="checkbox" defaultChecked={todo.isComplete} onChange={(e) => updateCompleted(todo, e.target.checked)} />
+                  <label>{todo.name}</label>
+                  <button class="destroy" onClick={() => deleteTodo(todo.id)}></button>
+                </div>
+                <input class="edit" value={todo.name} />
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    </section >
   );
 }
 
