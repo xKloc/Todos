@@ -15,7 +15,7 @@ function App() {
     await fetch('/api/todos', {
       method: "POST",
       body: JSON.stringify({ name: newTodo })
-    })
+    });
     setNewTodo("");
     await getTodos();
   }
@@ -47,8 +47,6 @@ function App() {
         </form>
       </header>
       <section className="main" style={{ display: "block" }}>
-        <input className="toggle-all" id="toggle-all" type="checkbox" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
           {todos.map(todo => {
             return (
