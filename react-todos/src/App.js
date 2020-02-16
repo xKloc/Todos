@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
-  const [todo, setTodo] = useState("");
+  const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
   async function getTodos() {
@@ -14,9 +14,9 @@ function App() {
     e.preventDefault();
     await fetch('/api/todos', {
       method: "POST",
-      body: JSON.stringify({ name: todo })
+      body: JSON.stringify({ name: newTodo })
     })
-    setTodo("");
+    setNewTodo("");
     await getTodos();
   }
 
@@ -43,7 +43,7 @@ function App() {
       <header className="header">
         <h1>todos</h1>
         <form onSubmit={createTodo}>
-          <input className="new-todo" placeholder="What needs to be done?" value={todo} onChange={(e) => setTodo(e.target.value)} />
+          <input className="new-todo" placeholder="What needs to be done?" value={newTodo} onChange={(e) => setNewTodo(e.target.value)} />
         </form>
       </header>
       <section className="main" style={{ display: "block" }}>
